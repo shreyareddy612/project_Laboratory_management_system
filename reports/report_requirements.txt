@@ -1,0 +1,28 @@
+## Lab Information
+Name:
+Contacts:
+Location:
+
+## Disease Information
+Name:
+Results:
+
+## Patient Information
+Name:
+Email:
+Photo:
+Phone: (Optional)
+Spouse:
+Number of Children:
+
+## Work
+Where:
+Profession:
+
+## Next of Kin
+Nema:
+Contact:
+Relationship:
+
+## Scanner
+Shanner Showing all the Information of patient

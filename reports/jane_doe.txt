@@ -1,0 +1,4 @@
+Name: Jane Doe
+Test For: Typhoid
+Results: Negative
+Comment: Take care of yourself
