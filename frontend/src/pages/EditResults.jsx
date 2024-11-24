@@ -34,6 +34,7 @@ const EditResults = () => {
                 className="bg-green-700 text-white p-2 w-1/2 rounded-md"
                 type="button"
                 value="Save"
+                
               />
             </div>
           </form>

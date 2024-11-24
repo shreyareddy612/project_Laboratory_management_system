@@ -6,7 +6,9 @@ const booktest = new Schema({
     disease: { type: String, required: true },
     user_email: { type: String, required: true },
     tested: {type: Boolean, default: false},
-    booking_no: { type: Number}
+    booking_no: { type: Number},
+    results: { type: String, enum: ["Positive", "Negative"], default: null }, // Example
+    status: { type: String, enum: ["Pending", "Completed"], default: "Pending" },
 });
 
 module.exports = mongoose.model('booktest', booktest);

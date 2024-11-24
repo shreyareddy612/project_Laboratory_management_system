@@ -18,6 +18,7 @@ import Patients from "./pages/Patients";
 import NavBar from "./components/NavBar";
 import Staff from "./pages/Staff";
 import Profile from "./pages/Profile";
+import BookedTestsPage from "./pages/bookedTests";
 
 const Layout = () => {
   return (
@@ -69,6 +70,11 @@ const router = createBrowserRouter([
         path: "/edit-results",
         element: <EditResults />,
       },
+      {
+        path: "/booked-tests",
+        element: <BookedTestsPage />,
+      },
+      
       {
         path: "/staff/:id",
         element: <Staff />,

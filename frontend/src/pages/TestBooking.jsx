@@ -29,7 +29,7 @@ const TestBooking = () => {
       await http.post("/bktest/createBkTest", formData);
       setSuccess("Test booked successfully!");
       setTimeout(() => {
-        navigate("/patients");
+        navigate("/booked-tests");
       }, 1500); // Redirect after success message
     } catch (error) {
       setError("Failed to book the test. Please try again.");
