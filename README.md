@@ -9,7 +9,6 @@ After technicians have done the test, the results are saved in the database. The
 NB: Technician can also print laboratory reports.
 </p>
 
-## AUTHOR (Charle Mbithi - mbithicharlse@gmail.com)
 
 ## Description
 This is a mern application developed with React, Node, MongoDB.
@@ -24,12 +23,6 @@ NB: Technician can also print laboratory reports.
     <li>Frontend - ReactJS and Tailwindcss</li>
     <li>Database - MongoDB</li>
     <li>Backend - Node JS, express.</li>
-    <li>Database Shema - draw.io</li>
 </ul>
 
-## Files and directories
-|   **File**   |   **Description**   |
-| -------------- | --------------------- |
-|[frontend](/frontend/) | This folder has React JS part of the project. |
-|[backend](/backend/) | This folder has Node JS, Mongoose part of the project. |
-|[Mockups](/backend/) | This folder has images of project mockup. |
+

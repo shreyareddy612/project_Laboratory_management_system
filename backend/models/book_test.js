@@ -7,7 +7,7 @@ const booktest = new Schema({
     user_email: { type: String, required: true },
     tested: {type: Boolean, default: false},
     booking_no: { type: Number},
-    results: { type: String, enum: ["Positive", "Negative"], default: null }, // Example
+    results: { type: String, enum: ["Pending" , "Positive", "Negative"], default: "Pending" }, // Example
     status: { type: String, enum: ["Pending", "Completed"], default: "Pending" },
 });
 
