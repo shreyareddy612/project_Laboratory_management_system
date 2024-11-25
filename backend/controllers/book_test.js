@@ -81,15 +81,37 @@ module.exports.generatePDF =async (req, res) => {
       res.send(pdfBuffer);
     });
 
-    // Add content to the PDF
-    doc.text("Lab Report", { align: "center", underline: true });
-    doc.moveDown();
-    doc.text(`Test: ${booking.disease}`);
-    doc.text(`Results: ${booking.results}`);
-    doc.text(`Status: ${booking.status}`);
-    doc.moveDown();
-    doc.text("Thank you for choosing our lab!", { align: "center" });
-    doc.end();
+
+// Set up the PDF header
+doc.fontSize(18).font("Helvetica-Bold").fillColor("blue").text("LabMS", 50, 50); // Lab name on the left
+doc.fontSize(12).font("Helvetica-Oblique").fillColor("black").text("Your Health, Our Priority!", 50, 70); // Tagline below the lab name
+doc.fontSize(10).fillColor("gray").text("1234 Health Blvd, Lab City, LC 56789", doc.page.width - 200, 50, { align: "right", width: 150 }); // Address on the right
+
+// Reset text properties and alignment for content
+doc.fontSize(14).font("Helvetica").fillColor("black"); // Reset font, size, and color
+doc.moveDown(2); // Adds spacing after the header
+
+// Add content to the PDF (default left-aligned unless specified)
+doc.moveDown(2); // Space before content starts
+doc.fontSize(12).fillColor("black").text("Lab Report",50); // Title centered
+doc.moveDown(2); // Add spacing between the title and the details
+
+// Shift content to the left
+doc.text(`Test: ${booking.disease}`, 50); // Left-aligned with a set X position
+doc.text(`Results: ${booking.results}`, 50);
+doc.text(`Status: ${booking.status}`, 50);
+
+doc.moveDown(4); // Add spacing before the thank-you message
+doc.text("Thank you for choosing our lab!", { align: "center" }); // Thank-you message centered
+doc.moveDown(2); // Adds spacing before the footer
+
+// Finalize the document
+doc.end();
+
+
+
+
+
   } catch (error) {
     console.error("Error generating report:", error);
     res.status(500).send("Failed to generate report.");
