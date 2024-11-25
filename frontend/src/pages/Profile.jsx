@@ -11,6 +11,7 @@ const Profile = ({ user = JSON.parse(localStorage.getItem("user")) }) => {
   const [profileData, setProfileData] = useState({});
   const [isProfileVisible, setIsProfileVisible] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+
   const [formData, setFormData] = useState({
     description: "",
     sex: "",
@@ -25,12 +26,6 @@ const Profile = ({ user = JSON.parse(localStorage.getItem("user")) }) => {
     next_of_kin_contact: "",
   });
 
-  const [description, setDescription] = useState("");
-
-  useEffect(() => {
-    setDescription(formData.description);
-  }, [description]);
-
   const navigate = useNavigate();
 
   const handleFormChange = (event) => {
@@ -41,117 +36,78 @@ const Profile = ({ user = JSON.parse(localStorage.getItem("user")) }) => {
     }));
   };
 
-  const handleSave = async (event) => {
+  const handleSave = async () => {
     try {
-      const profile = await http.post(
-        `/profile/createProfile/${user.id}`,
-        formData
-      );
-      console.log("Saved");
-      navigate("/profile/" + user.id);
+      await http.post(`/profile/createProfile/${user.id}`, formData);
+      alert("Profile saved successfully!");
+      navigate(`/profile/${user.id}`);
     } catch (error) {
-      console.log(error);
+      console.error("Save Error:", error);
     }
   };
 
-  const clickUpdateButton = (event) => {
-    if (showEditForm === false) {
-      setShowEditForm(true);
-    } else {
-      setShowEditForm(false);
-    }
-  };
-
-  const handleUpdate = async (event) => {
+  const handleUpdate = async () => {
     try {
-      const profile = await http.put(
-        `/profile/updateProfile/${user.id}`,
-        formData
-      );
-      navigate("/profile/" + user.id);
+      await http.put(`/profile/updateProfile/${user.id}`, formData);
+      alert("Profile updated successfully!");
+      navigate(`/profile/${user.id}`);
     } catch (error) {
-      console.log(error);
+      console.error("Update Error:", error);
     }
   };
 
-  const showProfile = () => {
-    setIsProfileVisible(!isProfileVisible);
+  const toggleEditForm = () => {
+    setShowEditForm((prev) => !prev);
   };
 
-  /**
-   * @description Checks if user is staff
-   * @param {*} user Object
-   * @returns true if user else false
-   */
-  const isStaff = (user) => {
-    if (user.designation === "staff") {
-      return true;
-    }
-
-    return false;
-  };
-
-  /**
-   * @description Check if logged in
-   * @param {*} user user object
-   * @returns true if exists or false if not exist
-   */
-  const isLoggedIn = (user) => {
-    if (user) {
-      return true;
-    }
-    return false;
-  };
-
-  /**
-   * @description Gets profile object
-   */
-  const getUserProfile = async () => {
+  const fetchUserProfile = async () => {
     try {
-      const profile = await http.get(`/profile/getProfileById/${user.id}`);
-      setProfileData(profile.data.userProfile);
+      const response = await http.get(`/profile/getProfileById/${user.id}`);
+      setProfileData(response.data.userProfile || {});
+      setFormData((prev) => ({
+        ...prev,
+        ...response.data.userProfile,
+      }));
     } catch (error) {
-      console.error(error);
+      console.error("Fetch Profile Error:", error);
     }
   };
+
   useEffect(() => {
-    getUserProfile();
-  }, [profileData]);
-
-  console.log(showEditForm);
+    fetchUserProfile();
+  }, []); // Fetch profile data only once on mount
 
   const logout = () => {
     localStorage.clear();
+    alert("Logged out successfully!");
+    navigate("/login");
   };
 
-  const checkStaff = isStaff(user);
-  const loggedIn = isLoggedIn(user);
+  const isStaff = (user) => user?.designation === "staff";
 
   return (
     <section className="flex flex-col min-h-full bg-teal-50">
-      {/* Menu */}
-      <Link
+      {/* Menu Toggle for Small Screens */}
+      <button
         className="flex flex-col border justify-evenly items-center rounded-full p-1 h-9 w-9 absolute z-20 lg:hidden"
-        onClick={showProfile}
+        onClick={() => setIsProfileVisible((prev) => !prev)}
       >
         <img src={account} alt={user.full_name} />
-        {/* <span className="bg-green-700 h-1 w-7 rounded">-</span>
-                <span className="bg-green-700 h-1 w-7 rounded">-</span>
-                <span className="bg-green-700 h-1 w-7 rounded">-</span> */}
-      </Link>
+      </button>
+
       <div className="flex flex-col sm:flex-row">
         {/* PROFILE SIDE BAR */}
-        <div className="flex-col max-h-max w-full items-center border shadow-lg p-2 m-1 sm:w-1/3 hidden sm:flex md">
+        <aside className="hidden sm:flex flex-col max-h-max w-full items-center border shadow-lg p-2 m-1 sm:w-1/3">
           {/* Profile Photo */}
           <div className="flex justify-center">
             <div className="cirular-image mb-2">
               <img src={profile} alt="Profile" />
             </div>
           </div>
-          {/* PersonalInfo */}
+          {/* Personal Info */}
           <div className="flex flex-col border-t-2 border-b-2">
             <div className="flex row p-2">
-              <span className="flex font-bold pr-2">Name:</span>
+              <span className="font-bold pr-2">Name:</span>
               {user.name}
             </div>
             <div className="flex row p-2">
@@ -163,159 +119,49 @@ const Profile = ({ user = JSON.parse(localStorage.getItem("user")) }) => {
               {user.phone}
             </div>
             <div className="flex justify-center">
-              <Link className="link-nav-btn" onClick={clickUpdateButton}>
+              <button onClick={toggleEditForm} className="link-nav-btn">
                 Update
-              </Link>
+              </button>
             </div>
           </div>
 
           <hr className="mt-2 mb-2" />
 
-          {/* Navigate to other pages */}
-          <div className="flex flex-col">
-            {checkStaff ? (
-              <div>
-                <Link
-                  to={`/patients/${user.id}`}
-                  className="link-nav-btn-underline-full-width"
-                >
+          {/* Navigation Links */}
+          <nav className="flex flex-col">
+            {isStaff(user) && (
+              <>
+                <Link to={`/patients/${user.id}`} className="link-nav-btn-underline-full-width">
                   Patients
                 </Link>
-                <Link
-                  to={`/staff/${user.id}`}
-                  className="link-nav-btn-underline-full-width"
-                >
+                <Link to={`/staff/${user.id}`} className="link-nav-btn-underline-full-width">
                   Staffs
                 </Link>
-                <Link
-                  to={`/test-booking/${user.id}`}
-                  className="link-nav-btn-underline-full-width"
-                >
-                  BookTest
-                </Link>
-              </div>
-            ) : (
-              <Link
-                to={`/test-booking/${user.id}`}
-                className="link-nav-btn-underline-full-width"
-              >
-                BookTest
-              </Link>
+              </>
             )}
+            <Link to={`/test-booking/${user.id}`} className="link-nav-btn-underline-full-width">
+              BookTest
+            </Link>
+            <button onClick={logout} className="link-nav-btn-underline-full-width">
+              Logout
+            </button>
+          </nav>
+        </aside>
 
-            {loggedIn ? (
-              <Link
-                to="/login"
-                onClick={logout}
-                className="link-nav-btn-underline-full-width"
-              >
-                Logout
-              </Link>
-            ) : (
-              <Link to="/login" className="link-nav-btn-underline-full-width">
-                Login
-              </Link>
-            )}
-          </div>
-        </div>
-
-        {/* Other Details */}
-        <div className="flex flex-col p-2 w-full border shadow-lg m-1 sm:w-2/3">
-          {/* Welcome */}
-          <h2 className="h2 mb-1">Welcome Again {user.name}!</h2>
-
-          {profileData != null && showEditForm === false ? (
+        {/* Main Content */}
+        <main className="flex flex-col p-2 w-full border shadow-lg m-1 sm:w-2/3">
+          <h2 className="h2 mb-1">Welcome Again, {user.name}!</h2>
+          {Object.keys(profileData).length > 0 && !showEditForm ? (
             <DisplayProfile profileData={profileData} />
           ) : (
             <EditProfile
-              profileData={profileData}
+              profileData={formData}
               handleFormChange={handleFormChange}
-              handleUpdate={handleUpdate}
               handleSave={handleSave}
+              handleUpdate={handleUpdate}
             />
           )}
-        </div>
-
-        {/* Profile Small Screens */}
-        <div
-          className={`flex-col max-h-max bg-white w-full items-center border shadow-lg p-2 m-1 sm:w-1/3 ${
-            isProfileVisible ? "block" : "hidden lg:hidden"
-          } absolute z-10`}
-        >
-          {/* Profile Photo */}
-          <div className="flex justify-center">
-            <div className="cirular-image mb-2">
-              <img src={profile} alt="Profile" />
-            </div>
-          </div>
-          {/* PersonalInfo */}
-          <div className="flex flex-col border-t-2 border-b-2">
-            <div className="flex row p-2">
-              <span className="flex font-bold pr-2">Name:</span>
-              {user.name}
-            </div>
-            <div className="flex row p-2">
-              <span className="font-bold pr-2">Email:</span>
-              {user.email}
-            </div>
-            <div className="flex row p-2">
-              <span className="font-bold pr-2">Phone:</span>
-              {user.phone}
-            </div>
-            <div className="flex justify-center">
-              <Link className="link-nav-btn">Update</Link>
-            </div>
-          </div>
-
-          <hr className="mt-2 mb-2" />
-
-          {/* Navigate to other pages */}
-          <div className="flex flex-col">
-            {checkStaff ? (
-              <div>
-                <Link
-                  to={`/patients/${user.id}`}
-                  className="link-nav-btn-underline-full-width"
-                >
-                  Patients
-                </Link>
-                <Link
-                  to={`/staff/${user.id}`}
-                  className="link-nav-btn-underline-full-width"
-                >
-                  Staffs
-                </Link>
-                <Link
-                  to={`/test-booking/${user.id}`}
-                  className="link-nav-btn-underline-full-width"
-                >
-                  BookTest
-                </Link>
-              </div>
-            ) : (
-              <Link
-                to={`/test-booking/${user.id}`}
-                className="link-nav-btn-underline-full-width"
-              >
-                BookTest
-              </Link>
-            )}
-
-            {loggedIn ? (
-              <Link
-                to="/login"
-                onClick={logout}
-                className="link-nav-btn-underline-full-width"
-              >
-                Logout
-              </Link>
-            ) : (
-              <Link to="/login" className="link-nav-btn-underline-full-width">
-                Login
-              </Link>
-            )}
-          </div>
-        </div>
+        </main>
       </div>
     </section>
   );
