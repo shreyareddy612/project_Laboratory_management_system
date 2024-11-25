@@ -108,105 +108,107 @@ const BookedTestsPage = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold text-green-700 text-center mb-6">
-        Booked Tests
-      </h1>
+  <h1 className="text-2xl font-bold text-green-700 text-center mb-6">
+    Booked Tests
+  </h1>
 
-      {bookedTests.length === 0 ? (
-        <p className="text-center text-gray-900">No booked tests available.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full border-collapse border border-gray-500">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border px-4 py-2">Full Name</th>
-                <th className="border px-4 py-2">Test</th>
-                <th className="border px-4 py-2">Booking No</th>
-                <th className="border px-4 py-2">Results</th>
-                <th className="border px-4 py-2">Status</th>
-                <th className="border px-4 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookedTests.map((booking) => (
-                <tr key={booking._id} className="text-center">
-                  <td className="border px-4 py-2">{booking.full_name}</td>
-                  <td className="border px-4 py-2">{booking.disease}</td>
-                  <td className="border px-4 py-2">{booking.booking_no}</td>
-                  <td className="border px-4 py-2">{booking.results}</td>
-                  <td className="border px-4 py-2">{booking.status}</td>
-                  <td className="border px-4 py-2">
-                    {booking.status === "Completed" && (
-                      <div className="m-2 p-2">
+  {bookedTests.length === 0 ? (
+    <p className="text-center text-gray-900">No booked tests available.</p>
+  ) : (
+    <div className="overflow-x-auto">
+      <table className="table-auto w-full border-collapse border border-gray-500">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border px-4 py-2">Full Name</th>
+            <th className="border px-4 py-2">Test</th>
+            <th className="border px-4 py-2">Booking No</th>
+            <th className="border px-4 py-2">Results</th>
+            <th className="border px-4 py-2">Status</th>
+            <th className="border px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookedTests
+            .slice() // Create a shallow copy of the array to avoid mutating the original array
+            .reverse() // Reverse the array to display the latest bookings first
+            .map((booking) => (
+              <tr key={booking._id} className="text-center">
+                <td className="border px-4 py-2">{booking.full_name}</td>
+                <td className="border px-4 py-2">{booking.disease}</td>
+                <td className="border px-4 py-2">{booking.booking_no}</td>
+                <td className="border px-4 py-2">{booking.results}</td>
+                <td className="border px-4 py-2">{booking.status}</td>
+                <td className="border px-4 py-2">
+                  {booking.status === "Completed" && (
+                    <div className="m-2 p-2">
                       <button
                         onClick={() => handleShowReport(booking?._id)}
                         className="mr-2 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
                       >
                         Show Report
                       </button>
-                      </div>
-                    )}
-                    {/* <div> */}
-                    <button
-                      onClick={() => handleEditClick(booking)}
-                      className="px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
-                    >
-                      Edit
-                    </button>
-                    {/* </div> */}
-                    {editData.id === booking._id && (
-                      <div className="mt-6 p-4 bg-gray-100 rounded shadow">
-                        <h2 className="text-sm font-bold text-green-700 mb-4">
-                          Edit Test No: {editData.test_no}
-                        </h2>
+                    </div>
+                  )}
+                  <button
+                    onClick={() => handleEditClick(booking)}
+                    className="px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
+                  >
+                    Edit
+                  </button>
+                  {editData.id === booking._id && (
+                    <div className="mt-6 p-4 bg-gray-100 rounded shadow">
+                      <h2 className="text-sm font-bold text-green-700 mb-4">
+                        Edit Test No: {editData.test_no}
+                      </h2>
 
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-1">
-                            Results:
-                          </label>
-                          <select
-                            name="results"
-                            value={editData.results}
-                            onChange={handleEditChange}
-                            className="w-full p-2 border rounded focus:ring-2 focus:ring-green-500"
-                          >
-                            <option value="Pending">Pending</option>
-                            <option value="Positive">Positive</option>
-                            <option value="Negative">Negative</option>
-                          </select>
-                        </div>
-
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-1">
-                            Status:
-                          </label>
-                          <select
-                            name="status"
-                            value={editData.status}
-                            onChange={handleEditChange}
-                            className="w-full p-2 border rounded focus:ring-2 focus:ring-green-500"
-                          >
-                            <option value="Pending">Pending</option>
-                            <option value="Completed">Completed</option>
-                          </select>
-                        </div>
-
-                        <button
-                          onClick={handleSave}
-                          className="mt-2 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium mb-1">
+                          Results:
+                        </label>
+                        <select
+                          name="results"
+                          value={editData.results}
+                          onChange={handleEditChange}
+                          className="w-full p-2 border rounded focus:ring-2 focus:ring-green-500"
                         >
-                          Save
-                        </button>
+                          <option value="Pending">Pending</option>
+                          <option value="Positive">Positive</option>
+                          <option value="Negative">Negative</option>
+                        </select>
                       </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium mb-1">
+                          Status:
+                        </label>
+                        <select
+                          name="status"
+                          value={editData.status}
+                          onChange={handleEditChange}
+                          className="w-full p-2 border rounded focus:ring-2 focus:ring-green-500"
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Completed">Completed</option>
+                        </select>
+                      </div>
+
+                      <button
+                        onClick={handleSave}
+                        className="mt-2 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </div>
+  )}
+</div>
+
   );
 };
 
