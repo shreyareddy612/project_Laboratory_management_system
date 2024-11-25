@@ -4,6 +4,7 @@ const Profile = require("../models/profile");
 module.exports.createProfile = async (req, res) => {
     try {
         const userId = req.params.user_id;
+        console.log(`userId`,userId)
         const newProfile = await Profile.create({
             description: req.body.description,
             sex: req.body.sex,
