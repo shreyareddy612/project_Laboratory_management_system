@@ -4,6 +4,7 @@ const Profile = require("../models/profile");
 module.exports.createProfile = async (req, res) => {
     try {
         const userId = req.params.user_id;
+        console.log(`userId`,userId)
         const newProfile = await Profile.create({
             description: req.body.description,
             sex: req.body.sex,
@@ -13,9 +14,6 @@ module.exports.createProfile = async (req, res) => {
             blood_group: req.body.blood_group,
             work_at: req.body.work_at,
             work: req.body.work,
-            next_of_kin: req.body.next_of_kin,
-            next_of_kin_rel: req.body.next_of_kin_rel,
-            next_of_kin_contact: req.body.next_of_kin_contact,
             user_id: userId
         });
     } catch (error) {

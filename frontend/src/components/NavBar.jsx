@@ -52,6 +52,9 @@ const NavBar = () => {
             <div className="ml-4 py-2 px-2 rounded hover:bg-green-700">
               <Link to={`/test-booking/${user.id}`}>Book Test</Link>
             </div>
+            <div className="block py-2 px-4 rounded hover:bg-green-700">
+              <Link to={`/booked-tests`}>Booked Tests</Link>
+            </div>
             <div className="ml-4 py-2 px-2 rounded hover:bg-green-700">
               <Link to={`/profile/${user.id}`}>Profile</Link>
             </div>
@@ -99,6 +102,9 @@ const NavBar = () => {
           <>
             <div className="block py-2 px-4 rounded hover:bg-green-700">
               <Link to={`/test-booking/${user.id}`}>Book Test</Link>
+            </div>
+            <div className="block py-2 px-4 rounded hover:bg-green-700">
+              <Link to={`/booked-tests`}>Booked Tests</Link>
             </div>
             <div className="block py-2 px-4 rounded hover:bg-green-700">
               <Link to={`/profile/${user.id}`}>Profile</Link>

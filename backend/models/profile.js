@@ -11,9 +11,6 @@ const profile = new Schema({
     blood_group: {type: String, default: "N/A"},
     work_at: {type: String, required: true, default: "N/A"},
     work: {type: String, required: true, default: "N/A"},
-    next_of_kin: {type: String, required: true, default: "N/A"},
-    next_of_kin_rel: {type: String, required: true, default: "N/A"},
-    next_of_kin_contact: {type: String, default: "N/A"},
     user_id: {type: String, required: true, default: "N/A"}
 });
 
