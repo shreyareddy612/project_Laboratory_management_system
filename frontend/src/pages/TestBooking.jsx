@@ -13,6 +13,16 @@ const TestBooking = () => {
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
 
+  // Predefined list of test names
+  const testOptions = [
+    "Malaria",
+    "COVID-19",
+    "Cholesterol",
+    "Blood Sugar",
+    "Hemoglobin",
+    "Thyroid",
+  ];
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
@@ -98,15 +108,28 @@ const TestBooking = () => {
           />
         </div>
 
-        <input
-          className="border-b-2 border-gray-400 w-4/5 p-2 mb-4 focus:outline-none focus:border-green-700"
-          required
-          type="text"
-          name="disease"
-          value={formData.disease}
-          placeholder="Test For e.g Malaria"
-          onChange={handleInputChange}
-        />
+        <div className="flex flex-row w-4/5 p-1 mb-4 items-center border-t-2">
+          <label htmlFor="disease" className="font-bold w-1/3 mr-1">
+            Test Name
+          </label>
+          <select
+            className="border-b-2 border-gray-400 w-2/3 p-2 focus:outline-none focus:border-green-700"
+            required
+            name="disease"
+            id="disease"
+            value={formData.disease}
+            onChange={handleInputChange}
+          >
+            <option value="" disabled>
+              Select Test
+            </option>
+            {testOptions.map((test) => (
+              <option key={test} value={test}>
+                {test}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <button
           className="bg-green-700 hover:bg-green-600 text-white font-bold p-2 rounded focus:outline-none focus:shadow-outline w-4/5 mb-4"
