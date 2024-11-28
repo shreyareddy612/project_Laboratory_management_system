@@ -19,6 +19,7 @@ import NavBar from "./components/NavBar";
 import Staff from "./pages/Staff";
 import Profile from "./pages/Profile";
 import BookedTestsPage from "./pages/bookedTests";
+import ManageTestsPage from "./pages/manageTests";
 
 const Layout = () => {
   return (
@@ -74,7 +75,10 @@ const router = createBrowserRouter([
         path: "/booked-tests",
         element: <BookedTestsPage />,
       },
-      
+      {
+        path: "/ManageTests",
+        element: <ManageTestsPage />,
+      },
       {
         path: "/staff/:id",
         element: <Staff />,
