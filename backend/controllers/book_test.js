@@ -91,10 +91,17 @@ doc.fontSize(10).fillColor("gray").text("1234 Health Blvd, Lab City, LC 56789", 
 doc.fontSize(14).font("Helvetica").fillColor("black"); // Reset font, size, and color
 doc.moveDown(2); // Adds spacing after the header
 
-// Add content to the PDF (default left-aligned unless specified)
-doc.moveDown(2); // Space before content starts
-doc.fontSize(12).fillColor("black").text("Lab Report",50); // Title centered
-doc.moveDown(2); // Add spacing between the title and the details
+const title = "Lab Report";
+doc.fontSize(12).fillColor("black");
+const titleWidth = doc.widthOfString(title);
+const titleX = (doc.page.width - titleWidth) / 2; // Calculate the X position for centering
+doc.text(title, titleX, doc.y); // Centered title
+doc.moveDown(2);
+
+doc.text(`Name: ${userdata.full_name}` ,50); 
+doc.text(`Email: ${userdata.email}` ,50); 
+doc.text(`Phone: Phone: ${userdata.phone}` ,50); 
+doc.moveDown(2);
 
 // Shift content to the left
 doc.text(`Test: ${booking.disease}`, 50); // Left-aligned with a set X position
