@@ -110,12 +110,12 @@ const ManageTestsPage = () => {
         Manage Tests
       </h1>
       <div className="mb-4 m-2 text-center">
-        <button
+        {/* <button
           onClick={() => setIsEditing(false)} // Reset to add mode
           className="px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
         >
           Add Test
-        </button>
+        </button> */}
       </div>
 
       {/* Add New Test Section */}
@@ -192,43 +192,47 @@ const ManageTestsPage = () => {
 
       {/* Tests Table */}
       <div className="overflow-x-auto">
-        <table className="table-auto w-full border-collapse border border-gray-500">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border px-4 py-2">ID</th>
-              <th className="border px-4 py-2">Test Name</th>
-              <th className="border px-4 py-2">Laboratory Name</th>
-              <th className="border px-4 py-2">Edit</th>
-              <th className="border px-4 py-2">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tests.map((test) => (
-              <tr key={test._id} className="text-center">
-                <td className="border px-4 py-2">{test._id}</td>
-                <td className="border px-4 py-2">{test.testName}</td>
-                <td className="border px-4 py-2">{test.labName}</td>
-                <td className="border px-4 py-2">
-                  <button
-                    onClick={() => handleEdit(test)}
-                    className="mr-2 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
-                  >
-                    Edit
-                  </button>
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleDelete(test._id)}
-                    className="px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+  <table className="table-auto w-full border-collapse border border-gray-500">
+    <thead>
+      <tr className="bg-gray-100">
+        <th className="border px-4 py-2">ID</th>
+        <th className="border px-4 py-2">Test Name</th>
+        <th className="border px-4 py-2">Laboratory Name</th>
+        <th className="border px-4 py-2">Edit</th>
+        <th className="border px-4 py-2">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {tests
+        .slice() // Create a copy of the tests array
+        .reverse() // Reverse the array to display recent items first
+        .map((test) => (
+          <tr key={test._id} className="text-center">
+            <td className="border px-4 py-2">{test._id}</td>
+            <td className="border px-4 py-2">{test.testName}</td>
+            <td className="border px-4 py-2">{test.labName}</td>
+            <td className="border px-4 py-2">
+              <button
+                onClick={() => handleEdit(test)}
+                className="mr-2 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
+              >
+                Edit
+              </button>
+            </td>
+            <td className="border px-4 py-2">
+              <button
+                onClick={() => handleDelete(test._id)}
+                className="px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        ))}
+    </tbody>
+  </table>
+</div>
+
     </div>
   );
 };
