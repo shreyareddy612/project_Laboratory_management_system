@@ -177,7 +177,7 @@ const EditProfile = ({
       {/* Submit Button */}
       <div className="label-row justify-end">
         <button type="submit" className="link-nav-btn">
-          {profileData ? "Update" : "Save"}
+          {profileData?.sex ? "Update" : "Save"}
         </button>
       </div>
     </form>

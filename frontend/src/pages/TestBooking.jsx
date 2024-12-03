@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import http from "../http-common";
 
@@ -11,17 +11,27 @@ const TestBooking = () => {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [testOptions, setTestOptions] = useState([]); // State for dynamic test options
   const navigate = useNavigate();
 
-  // Predefined list of test names
-  const testOptions = [
-    "Malaria",
-    "COVID-19",
-    "Cholesterol",
-    "Blood Sugar",
-    "Hemoglobin",
-    "Thyroid",
-  ];
+  // Fetch test options from the backend
+  const fetchTestOptions = async () => {
+    try {
+      const response = await http.get("/api/test/tests"); // API endpoint to fetch available tests
+      if (response.status === 200) {
+        setTestOptions(response.data.tests); // Assuming the API returns a list of tests
+      } else {
+        setError("Failed to fetch test options. Please try again.");
+      }
+    } catch (error) {
+      setError("Error fetching test options.");
+      console.error("Error fetching test options:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTestOptions(); // Call function to fetch test options on component mount
+  }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -53,9 +63,7 @@ const TestBooking = () => {
         className="flex flex-col items-center rounded-lg shadow-md p-4 w-full sm:w-2/3 md:w-1/2 lg:w-1/3 bg-white"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-center text-green-700 text-2xl mb-4">
-          Test Booking
-        </h1>
+        <h1 className="text-center text-green-700 text-2xl mb-4">Test Booking</h1>
 
         {error && (
           <div className="text-red-500 text-center mb-4">
@@ -123,11 +131,17 @@ const TestBooking = () => {
             <option value="" disabled>
               Select Test
             </option>
-            {testOptions.map((test) => (
-              <option key={test} value={test}>
-                {test}
+            {testOptions.length > 0 ? (
+              testOptions.map((test) => (
+                <option key={test._id} value={test.testName}>
+                  {test.testName} {/* Using testName instead of title */}
+                </option>
+              ))
+            ) : (
+              <option value="" disabled>
+                No tests available
               </option>
-            ))}
+            )}
           </select>
         </div>
 
