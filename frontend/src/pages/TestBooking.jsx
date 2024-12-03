@@ -17,7 +17,7 @@ const TestBooking = () => {
   // Fetch test options from the backend
   const fetchTestOptions = async () => {
     try {
-      const response = await http.get("/api/test/tests"); // API endpoint to fetch available tests
+      const response = await http.get("/test/tests"); // API endpoint to fetch available tests
       if (response.status === 200) {
         setTestOptions(response.data.tests); // Assuming the API returns a list of tests
       } else {

@@ -8,7 +8,7 @@ const EditProfile = ({
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (profileData) {
+    if (profileData?.description ) {
       handleUpdate();
     } else {
       handleSave();
@@ -177,7 +177,7 @@ const EditProfile = ({
       {/* Submit Button */}
       <div className="label-row justify-end">
         <button type="submit" className="link-nav-btn">
-          {profileData?.sex ? "Update" : "Save"}
+          {profileData?.description ? "Update" : "Save"}
         </button>
       </div>
     </form>
